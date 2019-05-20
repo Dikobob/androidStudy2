@@ -12,11 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 public class CrimeListFragment extends Fragment {
+
+    public static final int REQUEST_CRIME = 1;
 
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
@@ -70,7 +71,7 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getmId());
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CRIME);
         }
 
         public void bind(Crime crime) {
@@ -82,6 +83,13 @@ public class CrimeListFragment extends Fragment {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CRIME) {
+
+        }
+    }
 
     private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
 
