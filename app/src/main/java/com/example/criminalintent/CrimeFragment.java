@@ -65,15 +65,15 @@ public class CrimeFragment extends Fragment {
         mDateButton = (Button) v.findViewById(R.id.crime_date);
         mSolvedCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
 
-        mTitleField.setText(mCrime.getmTitle());
+        mTitleField.setText(mCrime.getTitle());
         updateDate();
-        mSolvedCheckBox.setChecked(mCrime.ismSolved());
+        mSolvedCheckBox.setChecked(mCrime.isSolved());
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager manager = getFragmentManager();
                 DatePickerFragment dialog = DatePickerFragment
-                        .newInstance(mCrime.getmDate());
+                        .newInstance(mCrime.getDate());
                 dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
                 dialog.show(manager, DIALOG_DATE);
             }
@@ -87,7 +87,7 @@ public class CrimeFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mCrime.setmTitle(s.toString());
+                mCrime.setTitle(s.toString());
             }
 
             @Override
@@ -99,11 +99,18 @@ public class CrimeFragment extends Fragment {
         mSolvedCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mCrime.setmSolved(isChecked);
+                mCrime.setSolved(isChecked);
             }
         });
 
         return v;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
     }
 
     @Override
@@ -114,12 +121,12 @@ public class CrimeFragment extends Fragment {
 
         if (requestCode ==REQUEST_DATE) {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
-            mCrime.setmDate(date);
+            mCrime.setDate(date);
             updateDate();
         }
     }
 
     private void updateDate() {
-        mDateButton.setText(mCrime.getmDate().toString());
+        mDateButton.setText(mCrime.getDate().toString());
     }
 }
